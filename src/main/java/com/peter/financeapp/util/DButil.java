@@ -14,25 +14,41 @@ public static void initializeDataBase(){
                 CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT UNIQUE NOT NULL,
-                password TEXT NOT NULL);
+                password TEXT NOT NULL,
+                created_at TEXT NOT NULL);
               
                 """;
         String createCategoriesTable = """
                 CREATE TABLE IF NOT EXISTS categories (
                 id INTEGER PRIMARY KEY AUTOINCREMENT ,
+                user_Id INTEGER NOT NULL,
                 name TEXT NOT NULL,
-                user_Id INTEGER,
+                type TEXT NOT NULL,
+                is_deleted INTEGER NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id));
                 """;
         String createTransactionsTable = """
                 CREATE TABLE IF NOT EXISTS transactions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                amount REAL NOT NULL,
-                category_id INTEGER,
-                date TEXT,
-                user_id INTEGER,
+                user_id INTEGER NOT NULL,
+                category_id INTEGER NOT NULL,
+                amount DECIMAL NOT NULL,
+                description TEXT,
+                transaction_date TEXT NOT NULL,
+                created_at TEXT NOT NULL,
                 FOREIGN KEY (category_id) REFERENCES categories(id),
                 FOREIGN KEY (user_id) REFERENCES users(id));
+                """;
+        String createBudgetsTable = """
+                CREATE TABLE IF NOT EXISTS budgets(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                category_id INTEGER NOT NULL,
+                month TEXT NOT NULL,
+                amount DECIMAL NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id),
+                FOREIGN KEY (category_id) REFERENCES categories(id)
+                );
                 """;
 
         try (Connection connection = getConnection();
@@ -40,10 +56,12 @@ public static void initializeDataBase(){
             stmt.execute(createUsersTable);
             stmt.execute(createCategoriesTable);
             stmt.execute(createTransactionsTable);
+            stmt.execute(createBudgetsTable);
+            stmt.execute("PRAGMA foreign_keys = ON;");
 
 
         } catch (SQLException e) {
-            throw new RuntimeException( "Could not create tables " +e);
+            throw new RuntimeException( "Failed to initialize database", e);
         }
 }
 

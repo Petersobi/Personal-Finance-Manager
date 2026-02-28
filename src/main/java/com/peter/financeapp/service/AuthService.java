@@ -2,14 +2,20 @@ package com.peter.financeapp.service;
 
 import com.peter.financeapp.dao.DataAccessException;
 import com.peter.financeapp.model.User;
+import com.peter.financeapp.service.security.PasswordEncoder;
 import com.peter.financeapp.repository.UserRepository;
-import com.peter.financeapp.util.HashUtil;
+import com.peter.financeapp.session.SessionManager;
 
 public class AuthService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final SessionManager sessionManager;
 
-    public AuthService(UserRepository userRepository){
+    public AuthService(UserRepository userRepository,PasswordEncoder passwordEncoder,SessionManager sessionManager){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.sessionManager = sessionManager;
+
     }
 
     public User register(String username, String password){
@@ -19,11 +25,13 @@ public class AuthService {
         if(userRepository.findByUsername(username)!= null){
             throw new AuthException("Username already exists!.");
         }
-        User user =new User(username,HashUtil.hashPassword(password));
+        String encodedPassword = passwordEncoder.encode(password);
+        User user =new User(username,encodedPassword);
         try {
         userRepository.save(user);} catch (DataAccessException e) {
             throw new AuthException("Unable to register user. try again later.");
         }
+        sessionManager.login(user);
         return user;
 
     }
@@ -32,12 +40,16 @@ public class AuthService {
 
         User user = userRepository.findByUsername(username);
         if (user==null){
-            return null;
+            throw new IllegalArgumentException("invalid credentials");
         }
-        if (HashUtil.checkPassword(password,user.getPassword())){
-            return user;
+        if (!passwordEncoder.matches(password,user.getPassword())){
+            throw new IllegalArgumentException("invalid credentials");
         }
-        return null;
+        sessionManager.login(user);
+        return user;
+    }
+    public void logout(){
+        sessionManager.logout();
     }
 
     public void validateUsername(String username){
