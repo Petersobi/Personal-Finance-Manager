@@ -27,7 +27,7 @@ public class SQLiteUserDAO implements UserRepository {
 
             ResultSet key = prs.getGeneratedKeys();
             if (key.next()){
-                user.setId(key.getInt(1));
+                user.setId(key.getLong(1));
             }
 
         } catch (SQLException e) {
@@ -45,7 +45,7 @@ public class SQLiteUserDAO implements UserRepository {
             ResultSet rs = prs.executeQuery();
             if (rs.next()){
                 return new User(
-                        rs.getInt("id"),
+                        rs.getLong("id"),
                         rs.getString("username"),
                         rs.getString("password"),
                         LocalDate.parse(rs.getString("created_at"))
@@ -67,7 +67,7 @@ public class SQLiteUserDAO implements UserRepository {
             ResultSet rs = prs.executeQuery();
             if (rs.next()){
                 return new User(
-                        rs.getInt("id"),
+                        rs.getLong("id"),
                         rs.getString("username"),
                         rs.getString("password"),
                         LocalDate.parse(rs.getString("created_at"))
