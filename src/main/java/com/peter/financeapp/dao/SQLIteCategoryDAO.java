@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryDAO implements CategoryRepository {
+public class SQLIteCategoryDAO implements CategoryRepository {
     @Override
     public void save(Category category) {
         String sql = """

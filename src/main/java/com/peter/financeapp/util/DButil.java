@@ -32,7 +32,7 @@ public static void initializeDataBase(){
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL,
                 category_id INTEGER NOT NULL,
-                amount DECIMAL NOT NULL,
+                amount TEXT NOT NULL,
                 description TEXT,
                 transaction_date TEXT NOT NULL,
                 created_at TEXT NOT NULL,
