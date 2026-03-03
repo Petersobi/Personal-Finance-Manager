@@ -48,12 +48,6 @@ public class TransactionService {
         return transactionRepository.findByUserId(userId);
 
     }
-    public List<Transaction> getUserTransactionForMonth(String month){
-        if(!sessionManager.isloggedIn()){
-            throw new IllegalStateException("User must be logged in!");
-        }
-        Long userId = sessionManager.getCurrentUser().getId();
-        return transactionRepository.findByUserIdAndMonth(userId,month); }
 
     public BigDecimal calculateBalance(){
         if(!sessionManager.isloggedIn()){
