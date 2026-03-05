@@ -1,8 +1,10 @@
 package com.peter.financeapp.dao;
 
+import com.peter.financeapp.model.CategoryType;
 import com.peter.financeapp.model.Transaction;
 import com.peter.financeapp.repository.TransactionRepository;
 import com.peter.financeapp.service.AuthException;
+import com.peter.financeapp.service.report.dto.TransactionReportDTO;
 import com.peter.financeapp.util.DButil;
 
 import java.math.BigDecimal;
@@ -100,5 +102,40 @@ public class SQLiteTransactionDAO implements TransactionRepository {
                 LocalDateTime.parse(rs.getString("created_at"))
 
         );
+    }
+
+    @Override
+    public List<TransactionReportDTO> findReportData(Long userId, String month) {
+        String sql = """
+                SELECT
+                t.amount, t.transaction_date,
+                c.name AS category_name,
+                c.type AS category_type
+                FROM transactions t
+                JOIN categories c ON t.category_id = c.id
+                WHERE t.user_id = ?
+                AND t.transaction_date LIKE ?
+                """;
+        List<TransactionReportDTO> results = new ArrayList<>();
+
+        try(Connection connection = DButil.getConnection();
+        PreparedStatement prs = connection.prepareStatement(sql)) {
+         prs.setLong(1,userId);
+         prs.setString(2,month);
+
+         ResultSet rs = prs.executeQuery();
+         while (rs.next()){
+             results.add(new TransactionReportDTO(
+                     new BigDecimal(rs.getString("amount")),
+                     rs.getString("category_name"),
+                     CategoryType.valueOf(rs.getString("category_type")),
+                     LocalDate.parse(rs.getString("transaction_date"))
+             ));
+         }
+         return results;
+        } catch (SQLException e) {
+            throw new DataAccessException("Error fetching report data",e);
+        }
+
     }
 }

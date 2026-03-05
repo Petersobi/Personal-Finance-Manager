@@ -57,6 +57,8 @@ public class ReportService {
       }
       return categoryReportDTOS;
   }
+
+
   private void validateUser(){
       if(!sessionManager.isloggedIn()){
           throw new IllegalStateException("User must be logged in!");
