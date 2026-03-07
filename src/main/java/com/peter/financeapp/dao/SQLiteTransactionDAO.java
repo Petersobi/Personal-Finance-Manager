@@ -15,7 +15,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SQLiteTransactionDAO implements TransactionRepository {
     @Override
@@ -61,10 +63,10 @@ public class SQLiteTransactionDAO implements TransactionRepository {
             while (rs.next()){
                 transactions.add(maprow(rs));
             }
-            return transactions;
+
         } catch (SQLException e) {
             throw new DataAccessException("Error fetching transactions",e);
-        }
+        } return transactions;
 
     }
 
@@ -85,10 +87,10 @@ public class SQLiteTransactionDAO implements TransactionRepository {
             while (rs.next()){
                 transactions.add(maprow(rs));
             }
-            return transactions;
+
         } catch (SQLException e) {
             throw new DataAccessException("Error fetching transactions for month",e);
-        }
+        } return transactions;
 
     }
     private Transaction maprow(ResultSet rs) throws SQLException{
@@ -132,10 +134,37 @@ public class SQLiteTransactionDAO implements TransactionRepository {
                      LocalDate.parse(rs.getString("transaction_date"))
              ));
          }
-         return results;
+
         } catch (SQLException e) {
             throw new DataAccessException("Error fetching report data",e);
-        }
+        } return results;
+
+    }
+
+    @Override
+    public Map<Long, BigDecimal> getMonthlyCategorySpending(Long userId, String month) {
+        String sql = """
+                SELECT category_id, SUM(amount) AS total_spent
+                FROM transactions WHERE user_id = ?
+                AND month like ? GROUP BY category_id
+                """;
+        Map<Long,BigDecimal> results = new HashMap<>();
+        try (Connection connection = DButil.getConnection();
+        PreparedStatement prs = connection.prepareStatement(sql)) {
+            prs.setLong(1,userId);
+            prs.setString(2,month);
+
+            ResultSet rs = prs.executeQuery();
+
+            while (rs.next()){
+                Long categoryID = rs.getLong("category_id");
+                BigDecimal total = new BigDecimal(rs.getString("total_spent"));
+                results.put(categoryID,total);
+            }
+
+        } catch (SQLException e) {
+            throw new DataAccessException("Error calculating spending",e);
+        } return results;
 
     }
 }

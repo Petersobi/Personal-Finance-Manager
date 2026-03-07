@@ -7,6 +7,7 @@ import com.peter.financeapp.repository.CategoryRepository;
 import com.peter.financeapp.repository.TransactionRepository;
 import com.peter.financeapp.service.report.dto.CategoryReportDTO;
 import com.peter.financeapp.service.report.dto.MonthlySummaryDTO;
+import com.peter.financeapp.service.report.dto.TransactionReportDTO;
 import com.peter.financeapp.session.SessionManager;
 
 import java.math.BigDecimal;
@@ -14,24 +15,22 @@ import java.util.*;
 
 public class ReportService {
   private final TransactionRepository transactionRepository;
-  private final CategoryRepository categoryRepository;
   private SessionManager sessionManager;
 
   public ReportService(TransactionRepository transactionRepository,CategoryRepository categoryRepository,SessionManager sessionManager){
-      this.transactionRepository = transactionRepository; this.categoryRepository = categoryRepository; this.sessionManager = sessionManager;
+      this.transactionRepository = transactionRepository;this.sessionManager = sessionManager;
   }
 
   public MonthlySummaryDTO getMonthlySummary(String month){
       validateUser();
       Long userId = sessionManager.getCurrentUser().getId();
-      List<Transaction> transactions = transactionRepository.findByUserIdAndMonth(userId,month);
+      List<TransactionReportDTO> transactions = transactionRepository.findReportData(userId,month);
       BigDecimal totalIncome = BigDecimal.ZERO;
       BigDecimal totalExpense = BigDecimal.ZERO;
 
-      for(Transaction transaction:transactions){
-          Category category = categoryRepository.findById(transaction.getCategoryId());
+      for(TransactionReportDTO transaction:transactions){
 
-          if (category.getType().equals(CategoryType.INCOME)){
+          if (transaction.getCategoryType().equals(CategoryType.INCOME)){
              totalIncome = totalIncome.add(transaction.getAmount());
           } else totalExpense = totalExpense.add(transaction.getAmount());
       }
@@ -42,13 +41,12 @@ public class ReportService {
   public List<CategoryReportDTO> getExpenseBreakdown(String month){
       validateUser();
       Long userId = sessionManager.getCurrentUser().getId();
-      List<Transaction> transactions = transactionRepository.findByUserIdAndMonth(userId,month);
+      List<TransactionReportDTO> transactions = transactionRepository.findReportData(userId,month);
       Map<String,BigDecimal> categoryTotals = new HashMap<>();
-      for (Transaction transaction:transactions){
-          Category category = categoryRepository.findById(transaction.getCategoryId());
+      for (TransactionReportDTO transaction:transactions){
 
-          if(category.getType().equals(CategoryType.EXPENSE)){
-              categoryTotals.put(category.getName(),categoryTotals.getOrDefault(category.getName(),BigDecimal.ZERO).add(transaction.getAmount()));
+          if(transaction.getCategoryType().equals(CategoryType.EXPENSE)){
+              categoryTotals.put(transaction.getCategoryName(),categoryTotals.getOrDefault(transaction.getCategoryName(),BigDecimal.ZERO).add(transaction.getAmount()));
           }
       }
       List<CategoryReportDTO> categoryReportDTOS = new ArrayList<>();

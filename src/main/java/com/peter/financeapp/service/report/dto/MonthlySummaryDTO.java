@@ -3,9 +3,9 @@ package com.peter.financeapp.service.report.dto;
 import java.math.BigDecimal;
 
 public class MonthlySummaryDTO {
-    private BigDecimal totalIncome;
-    private BigDecimal totalExpense;
-    private BigDecimal netSavings;
+    private final BigDecimal totalIncome;
+    private final BigDecimal totalExpense;
+    private final BigDecimal netSavings;
 
     public MonthlySummaryDTO(BigDecimal totalIncome,BigDecimal totalExpense,BigDecimal netSavings){
         this.totalIncome = totalIncome;   this.totalExpense =totalExpense; this.netSavings = netSavings;

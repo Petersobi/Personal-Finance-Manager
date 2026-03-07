@@ -6,10 +6,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class TransactionReportDTO {
-    private BigDecimal amount;
-    private String categoryName;
-    private CategoryType  categoryType;
-    private LocalDate localDate;
+    private final BigDecimal amount;
+    private final String categoryName;
+    private final CategoryType  categoryType;
+    private final LocalDate localDate;
 
     public TransactionReportDTO(BigDecimal amount,String categoryName,CategoryType categoryType,LocalDate localDate){
         this.amount = amount; this.categoryName = categoryName; this.categoryType = categoryType; this.localDate = localDate;
