@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="24"
+      styleClass="dashboard-root"
+      xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.peter.financeapp.ui.controller.BudgetController"
+      VBox.vgrow="ALWAYS">
+
+    <!-- HEADER -->
+    <HBox alignment="CENTER_LEFT" styleClass="dashboard-header">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="Budgets" styleClass="dashboard-welcome-name"/>
+            <Label text="Set and track your monthly spending limits"
+                   styleClass="dashboard-subheading"/>
+        </VBox>
+        <Button text="+ Add Budget"
+                onAction="#handleAddBudget"
+                styleClass="button-primary"/>
+    </HBox>
+
+    <!-- FILTER ROW -->
+    <HBox spacing="12" alignment="CENTER_LEFT" styleClass="filter-row">
+        <Label text="Filter by month" styleClass="input-label"/>
+        <ComboBox fx:id="monthBox"
+                  promptText="Select Month"
+                  prefWidth="200"
+                  styleClass="combo-box"/>
+    </HBox>
+
+    <!-- SCROLLABLE CONTENT -->
+    <ScrollPane fitToWidth="true"
+                fitToHeight="false"
+                VBox.vgrow="ALWAYS"
+                styleClass="scroll-pane"
+                style="-fx-background: transparent; -fx-background-color: transparent;">
+
+        <VBox spacing="24" style="-fx-padding: 0 0 24 0;">
+
+            <!-- BUDGET TABLE -->
+            <VBox spacing="12"
+                  styleClass="dashboard-table-section"
+                  VBox.vgrow="NEVER">
+
+                <Label text="Budget Limits" styleClass="section-title"/>
+
+                <TableView fx:id="budgetTable"
+                           prefHeight="200"
+                           maxWidth="Infinity"
+                           styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="categoryColumn" text="Category"  prefWidth="160"/>
+                        <TableColumn fx:id="budgetColumn"   text="Budget(₦)" prefWidth="140"/>
+                        <TableColumn fx:id="actionColumn"   text="Actions"   prefWidth="100"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
+
+                <Pagination fx:id="pagination"
+                            maxWidth="Infinity"
+                            styleClass="pagination"/>
+
+            </VBox>
+
+            <!-- BUDGET PROGRESS -->
+            <VBox spacing="12"
+                  styleClass="dashboard-table-section"
+                  VBox.vgrow="ALWAYS">
+
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <Label text="Spending Progress"
+                           styleClass="section-title"
+                           HBox.hgrow="ALWAYS"/>
+                    <Label text="Green = under 70%  •  Orange = under 100%  •  Red = over budget"
+                           styleClass="dashboard-subheading"/>
+                </HBox>
+
+                <ListView fx:id="budgetListView"
+                          prefHeight="300"
+                          maxWidth="Infinity"
+                          VBox.vgrow="ALWAYS"
+                          styleClass="list-cell"/>
+
+            </VBox>
+
+        </VBox>
+
+    </ScrollPane>
+
+</VBox>

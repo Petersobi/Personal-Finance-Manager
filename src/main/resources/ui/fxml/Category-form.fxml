@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane fx:id="root"
+           xmlns="http://javafx.com/javafx/17.0.12"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.peter.financeapp.ui.controller.CategoryFormController"
+           styleClass="dialog-overlay">
+
+    <VBox spacing="0"
+          alignment="TOP_LEFT"
+          maxWidth="400"
+          styleClass="login-card">
+
+        <!-- HEADER -->
+        <HBox alignment="CENTER_LEFT" style="-fx-padding: 0 0 24 0;">
+            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                <Label text="Add Category" styleClass="dashboard-welcome-name"/>
+                <Label text="Create a new spending or income category"
+                       styleClass="dashboard-subheading"/>
+            </VBox>
+        </HBox>
+
+        <!-- CATEGORY NAME -->
+        <Label text="CATEGORY NAME" styleClass="input-label"/>
+        <TextField fx:id="nameField"
+                   promptText="e.g. Groceries, Salary"
+                   maxWidth="Infinity"
+                   styleClass="login-field"
+                   style="-fx-padding: 6 0 4 0;"/>
+        <Label fx:id="nameLabel"
+               styleClass="error-label"
+               visible="false"
+               style="-fx-padding: 0 0 16 0;"/>
+
+        <!-- CATEGORY TYPE -->
+        <Label text="CATEGORY TYPE" styleClass="input-label"
+               style="-fx-padding: 10 0 0 0;"/>
+        <ComboBox fx:id="chooseCategoryType"
+                  promptText="Select a type"
+                  maxWidth="Infinity"
+                  styleClass="combo-box"
+                  style="-fx-padding: 6 0 4 0;"/>
+        <Label fx:id="categoryLabel"
+               styleClass="error-label"
+               visible="false"
+               style="-fx-padding: 0 0 24 0;"/>
+
+        <!-- ACTIONS -->
+        <HBox spacing="12" style="-fx-padding: 8 0 0 0;">
+            <Button text="Save Category"
+                    onAction="#handleSave"
+                    styleClass="button-success"
+                    maxWidth="Infinity"
+                    HBox.hgrow="ALWAYS"
+                    style="-fx-padding: 13 0;"/>
+            <Button text="Cancel"
+                    onAction="#handleCancel"
+                    styleClass="button-outline"
+                    maxWidth="Infinity"
+                    HBox.hgrow="ALWAYS"
+                    style="-fx-padding: 13 0;"/>
+        </HBox>
+
+    </VBox>
+</StackPane>

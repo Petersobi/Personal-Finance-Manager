@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<StackPane prefHeight="800.0" prefWidth="900.0"
+        xmlns="http://javafx.com/javafx/17.0.12"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.peter.financeapp.ui.controller.RegisterController">
+    <VBox>
+    <!-- CUSTOM TITLE BAR -->
+    <HBox fx:id="titleBar"
+          alignment="CENTER_LEFT"
+          spacing="10"
+          styleClass="title-bar"
+          maxHeight="5"
+    >
+
+
+        <!-- WINDOW CONTROLS -->
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="minimizeBtn"
+                text="—"
+                styleClass="window-btn"
+                onAction="#handleMinimize"/>
+        <Button fx:id="maximizeBtn"
+                text="⬜"
+                styleClass="window-btn"
+                onAction="#handleMaximize"/>
+        <Button fx:id="closeBtn"
+                text="✕"
+                styleClass="window-btn-close"
+                onAction="#handleClose"/>
+    </HBox>
+
+        <VBox alignment="CENTER" spacing="0" styleClass="login-bg">
+
+            <!-- CARD -->
+            <VBox alignment="CENTER_LEFT" maxWidth="420" spacing="0" styleClass="login-card">
+
+                <!-- LOGO -->
+                <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 0 24 0;">
+                    <Label text="⚡" styleClass="logo-icon"/>
+                    <VBox spacing="2">
+                        <Label text="FinPulse" styleClass="logo-text"/>
+                        <Label text="Your financial heartbeat" styleClass="logo-tagline"/>
+                    </VBox>
+                </HBox>
+
+                <!-- HEADING -->
+                <Label text="Create Account" styleClass="login-heading"/>
+                <Label text="Start tracking your finances today"
+                       styleClass="login-subheading"
+                       style="-fx-padding: 4 0 24 0;"/>
+
+                <!-- FIRST & LAST NAME -->
+                <Label text="FULL NAME" styleClass="input-label"/>
+                <HBox spacing="10" style="-fx-padding: 6 0 16 0;">
+                    <TextField fx:id="firstNameField"
+                               promptText="First Name"
+                               styleClass="login-field"
+                               HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="lastNameField"
+                               promptText="Last Name"
+                               styleClass="login-field"
+                               HBox.hgrow="ALWAYS"/>
+                </HBox>
+                <Label fx:id="nameLabel"
+                       styleClass="error-label"
+                       visible="false"
+                       style="-fx-padding: 0 0 8 0;"/>
+
+                <!-- USERNAME -->
+                <Label text="USERNAME" styleClass="input-label"/>
+                <TextField fx:id="usernameField"
+                           promptText="Enter your username"
+                           maxWidth="Infinity"
+                           styleClass="login-field"
+                           style="-fx-padding: 6 0 4 0;"/>
+                <Label fx:id="usernameLabel"
+                       styleClass="error-label"
+                       visible="false"
+                       style="-fx-padding: 0 0 12 0;"/>
+
+                <!-- PASSWORD -->
+                <Label text="PASSWORD" styleClass="input-label"
+                       style="-fx-padding: 4 0 0 0;"/>
+                <PasswordField fx:id="passwordField"
+                               promptText="••••••••"
+                               maxWidth="Infinity"
+                               styleClass="login-field"
+                               style="-fx-padding: 6 0 4 0;"/>
+                <Label fx:id="passwordLabel"
+                       styleClass="error-label"
+                       visible="false"
+                       style="-fx-padding: 0 0 12 0;"/>
+
+                <!-- CONFIRM PASSWORD -->
+                <Label text="CONFIRM PASSWORD" styleClass="input-label"
+                       style="-fx-padding: 4 0 0 0;"/>
+                <PasswordField fx:id="confirmPasswordField"
+                               promptText="••••••••"
+                               maxWidth="Infinity"
+                               styleClass="login-field"
+                               style="-fx-padding: 6 0 4 0;"/>
+                <Label fx:id="confirmPasswordLabel"
+                       styleClass="error-label"
+                       visible="false"
+                       style="-fx-padding: 0 0 24 0;"/>
+
+                <!-- REGISTER BUTTON -->
+                <Button fx:id="registerButton"
+                        text="Create Account"
+                        maxWidth="Infinity"
+                        onAction="#handleRegister"
+                        styleClass="button-primary"
+                        style="-fx-padding: 13 0;"/>
+
+                <HBox alignment="CENTER" style="-fx-padding: 18 0 0 0;">
+                    <Label text="Already have an account? " styleClass="login-subheading"/>
+                    <Hyperlink text="Sign In"
+                               onAction="#gotoLogin"
+                               styleClass="link-accent"/>
+                </HBox>
+
+            </VBox>
+        </VBox>
+    </VBox>
+</StackPane>

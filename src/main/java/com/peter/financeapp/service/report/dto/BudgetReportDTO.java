@@ -6,10 +6,13 @@ public class BudgetReportDTO {
     private final String categoryName;
     private final BigDecimal budgetAmount;
     private final BigDecimal spentAmount;
-    private final BigDecimal remaining;
+    private final BigDecimal remainingAmount;
+    private String status;
+    private Long budgetId;
+
 
     public BudgetReportDTO(String categoryName,BigDecimal budgetAmount,BigDecimal spentAmount,BigDecimal remaining){
-        this.categoryName = categoryName; this.budgetAmount = budgetAmount; this.spentAmount = spentAmount; this.remaining = remaining;
+        this.categoryName = categoryName; this.budgetAmount = budgetAmount; this.spentAmount = spentAmount; this.remainingAmount = remaining;
     }
 
     public String getCategoryName() {
@@ -24,7 +27,23 @@ public class BudgetReportDTO {
         return spentAmount;
     }
 
-    public BigDecimal getRemaining() {
-        return remaining;
+    public BigDecimal getRemainingAmount() {
+        return remainingAmount;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public Long getBudgetId() {
+        return budgetId;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setBudgetId(Long budgetId) {
+        this.budgetId = budgetId;
     }
 }

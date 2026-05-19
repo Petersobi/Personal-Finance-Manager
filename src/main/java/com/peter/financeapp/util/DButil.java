@@ -15,6 +15,8 @@ public static void initializeDataBase(){
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL,
+                first_Name TEXT NOT NULL,
+                last_Name TEXT NOT NULL,
                 created_at TEXT NOT NULL);
               
                 """;
@@ -25,6 +27,7 @@ public static void initializeDataBase(){
                 name TEXT NOT NULL,
                 type TEXT NOT NULL,
                 is_deleted INTEGER NOT NULL,
+                UNIQUE (user_id,name,type),
                 FOREIGN KEY (user_id) REFERENCES users(id));
                 """;
         String createTransactionsTable = """
@@ -36,6 +39,7 @@ public static void initializeDataBase(){
                 description TEXT,
                 transaction_date TEXT NOT NULL,
                 created_at TEXT NOT NULL,
+                is_deleted INTEGER NOT NULL,
                 FOREIGN KEY (category_id) REFERENCES categories(id),
                 FOREIGN KEY (user_id) REFERENCES users(id));
                 """;

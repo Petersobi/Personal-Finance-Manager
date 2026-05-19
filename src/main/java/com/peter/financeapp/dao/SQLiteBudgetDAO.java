@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SQLiteBudgetDAO implements BudgetRepository {
@@ -32,15 +34,75 @@ public class SQLiteBudgetDAO implements BudgetRepository {
             }
 
         } catch (SQLException e) {
-            throw new DataAccessException("Error saving budget",e);
+            throw new DataAccessException("Error saving budget " + e.getMessage(),e);
         }
+    }
+    @Override
+    public void delete(Long id) {
+        String sql = """
+                DELETE FROM budgets
+                WHERE id = ?
+                """;
+        try(Connection conn = DButil.getConnection();
+            PreparedStatement prs = conn.prepareStatement(sql)) {
+            prs.setLong(1,id);
+            prs.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error deleting budget",e);
+        }
+    }
+
+    @Override
+    public List<Budget> findUserBudgets(Long userId, String month) {
+        String sql = """
+                SELECT * FROM budgets WHERE
+                user_id = ?
+                AND month LIKE ?
+                """;
+        List<Budget> budgets = new ArrayList<>();
+        try (Connection conn = DButil.getConnection();
+             PreparedStatement prs = conn.prepareStatement(sql)) {
+            prs.setLong(1, userId);
+            prs.setString(2, month + "%");
+
+            ResultSet rs = prs.executeQuery();
+            while (rs.next()){
+                budgets.add(maprow(rs));
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Error fetching Budgets",e);
+        } return budgets;
+    }
+    @Override
+    public Budget findUserBudget(Long id) {
+        String sql = """
+                SELECT * FROM budgets WHERE
+                id = ?
+                """;
+
+        try (Connection conn = DButil.getConnection();
+             PreparedStatement prs = conn.prepareStatement(sql)) {
+            prs.setLong(1,id);
+
+            ResultSet rs = prs.executeQuery();
+            if (rs.next()){
+              return new Budget( rs.getLong("id"),
+                      rs.getLong("user_id"),
+                      rs.getLong("category_id"),
+                      rs.getString("month"),
+                      new BigDecimal(rs.getString("amount"))
+              );
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Error fetching Budget",e);
+        } return null;
     }
 
     @Override
     public Budget findByUserCategoryAndMonth(Long userId, Long categoryId, String month) {
         String sql = """
                 SELECT * FROM budgets WHERE
-                user_id = ? ANDA category_id = ?
+                user_id = ? AND category_id = ?
                 AND month = ?
                 """;
         try (Connection conn = DButil.getConnection();

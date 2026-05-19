@@ -6,6 +6,8 @@ import com.peter.financeapp.service.security.PasswordEncoder;
 import com.peter.financeapp.repository.UserRepository;
 import com.peter.financeapp.session.SessionManager;
 
+import java.time.LocalDate;
+
 public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -18,15 +20,18 @@ public class AuthService {
 
     }
 
-    public User register(String username, String password){
+    public User register(String username, String password,String firstName,String lastName){
         validateUsername(username);
         validatePassword(password);
+        validateName(firstName);
+        validateName(lastName);
 
         if(userRepository.findByUsername(username)!= null){
             throw new AuthException("Username already exists!.");
         }
         String encodedPassword = passwordEncoder.encode(password);
-        User user =new User(username,encodedPassword);
+        LocalDate createdAt = LocalDate.now();
+        User user =new User(username,encodedPassword,createdAt,firstName,lastName);
         try {
         userRepository.save(user);} catch (DataAccessException e) {
             throw new AuthException("Unable to register user. try again later.");
@@ -38,12 +43,21 @@ public class AuthService {
 
     public User login(String username,String password) {
 
+        if(username.isEmpty()&&password.isEmpty()){
+            throw new AuthException("enter your credentials");
+        }
+        if(username.isEmpty()){
+            throw new AuthException("enter your username");
+        }
+        if(password.isEmpty()){
+            throw new AuthException("enter your password");
+        }
         User user = userRepository.findByUsername(username);
         if (user==null){
-            throw new IllegalArgumentException("invalid credentials");
+            throw new AuthException("invalid credentials");
         }
         if (!passwordEncoder.matches(password,user.getPassword())){
-            throw new IllegalArgumentException("invalid credentials");
+            throw new AuthException("invalid credentials");
         }
         sessionManager.login(user);
         return user;
@@ -60,6 +74,11 @@ public class AuthService {
     public void validatePassword(String password){
         if (password==null||password.length()<6){
             throw new AuthException("password must be at least 6 characters long");
+        }
+    }
+    public void validateName(String name){
+        if(name==null){
+            throw new AuthException("name cannot be null");
         }
     }
 }

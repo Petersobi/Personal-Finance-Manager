@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.peter.financeapp.ui.controller.DashboardController"
+      styleClass="dashboard-root"
+      spacing="24">
+
+    <!-- HEADER -->
+    <HBox alignment="CENTER_LEFT" styleClass="dashboard-header">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <HBox spacing="6" alignment="CENTER_LEFT">
+                <Label text="Welcome back," styleClass="dashboard-welcome"/>
+                <Label fx:id="firstNameLabel" styleClass="dashboard-welcome-name"/>
+            </HBox>
+            <Label text="Here's your financial overview" styleClass="dashboard-subheading"/>
+        </VBox>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button text="+ Add Income"
+                    onAction="#handleAddIncome"
+                    styleClass="button-success"/>
+            <Button text="+ Add Expense"
+                    onAction="#handleAddExpense"
+                    styleClass="button-danger"/>
+        </HBox>
+    </HBox>
+
+    <!-- STATS GRID -->
+    <GridPane hgap="16" vgap="16" styleClass="dashboard-grid">
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="33.33"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="33.33"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="33.34"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="100" vgrow="ALWAYS"/>
+        </rowConstraints>
+
+        <!-- INCOME -->
+        <VBox alignment="CENTER_LEFT" styleClass="stat-card"
+              GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <HBox alignment="CENTER_LEFT" spacing="8" style="-fx-padding: 0 0 12 0;">
+                <Label text="📈" styleClass="stat-icon"/>
+                <Label text="Income" styleClass="grid-title"/>
+            </HBox>
+            <Label fx:id="incomeLabel" styleClass="grid-stat grid-income"/>
+        </VBox>
+
+        <!-- EXPENSES -->
+        <VBox alignment="CENTER_LEFT" styleClass="stat-card"
+              GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <HBox alignment="CENTER_LEFT" spacing="8" style="-fx-padding: 0 0 12 0;">
+                <Label text="📉" styleClass="stat-icon"/>
+                <Label text="Expenses" styleClass="grid-title"/>
+            </HBox>
+            <Label fx:id="expenseLabel" styleClass="grid-stat grid-expense"/>
+        </VBox>
+
+        <!-- SAVINGS -->
+        <VBox alignment="CENTER_LEFT" styleClass="stat-card"
+              GridPane.columnIndex="2" GridPane.rowIndex="0">
+            <HBox alignment="CENTER_LEFT" spacing="8" style="-fx-padding: 0 0 12 0;">
+                <Label text="🏦" styleClass="stat-icon"/>
+                <Label text="Savings" styleClass="grid-title"/>
+            </HBox>
+            <Label fx:id="savingsLabel" styleClass="grid-stat grid-savings"/>
+        </VBox>
+
+    </GridPane>
+    <!-- RECENT TRANSACTIONS -->
+    <VBox spacing="12" VBox.vgrow="ALWAYS" styleClass="dashboard-table-section">
+
+        <HBox alignment="CENTER_LEFT">
+            <Label text="Recent Transactions"
+                   styleClass="section-title"
+                   HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <TableView fx:id="recentTransactionsTable"
+                   maxWidth="Infinity"
+                   VBox.vgrow="ALWAYS"
+                   styleClass="table-view">
+            <columns>
+                <TableColumn fx:id="dateColumn"     text="Date"     prefWidth="120"/>
+                <TableColumn fx:id="categoryColumn" text="Category" prefWidth="140"/>
+                <TableColumn fx:id="typeColumn"     text="Type"     prefWidth="100"/>
+                <TableColumn fx:id="amountColumn"   text="Amount(₦)"   prefWidth="120"/>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+
+    </VBox>
+
+</VBox>

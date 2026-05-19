@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+
+<BorderPane
+        xmlns="http://javafx.com/javafx/17.0.12"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.peter.financeapp.ui.controller.ReportController"
+        styleClass="dashboard-root">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" styleClass="dashboard-header">
+            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                <Label text="Reports" styleClass="dashboard-welcome-name"/>
+                <Label text="Analyse your financial activity over time"
+                       styleClass="dashboard-subheading"/>
+            </VBox>
+            <HBox spacing="12" alignment="CENTER_RIGHT">
+                <Label text="Filter by month" styleClass="input-label"/>
+                <ComboBox fx:id="monthPicker"
+                          prefWidth="200"
+                          styleClass="combo-box"/>
+            </HBox>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true"
+                    fitToHeight="false"
+                    styleClass="scroll-pane"
+        style="-fx-background: transparent; -fx-background-color: transparent;">
+
+            <VBox spacing="24" style="-fx-padding: 0 28 28 28;">
+
+                <!-- STATS GRID -->
+                <GridPane hgap="16" vgap="16">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="25"/>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="25"/>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="25"/>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="25"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="100" vgrow="ALWAYS"/>
+                    </rowConstraints>
+
+                    <!-- BALANCE -->
+                    <VBox alignment="CENTER_LEFT" styleClass="stat-card"
+                          GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <HBox alignment="CENTER_LEFT" spacing="8"
+                              style="-fx-padding: 0 0 12 0;">
+                            <Label text="💰" styleClass="stat-icon"/>
+                            <Label text="Balance" styleClass="grid-title"/>
+                        </HBox>
+                        <Label fx:id="balanceLabel" styleClass="grid-stat grid-balance"/>
+                    </VBox>
+
+                    <!-- INCOME -->
+                    <VBox alignment="CENTER_LEFT" styleClass="stat-card"
+                          GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <HBox alignment="CENTER_LEFT" spacing="8"
+                              style="-fx-padding: 0 0 12 0;">
+                            <Label text="📈" styleClass="stat-icon"/>
+                            <Label text="Income" styleClass="grid-title"/>
+                        </HBox>
+                        <Label fx:id="incomeLabel" styleClass="grid-stat grid-income"/>
+                    </VBox>
+
+                    <!-- EXPENSES -->
+                    <VBox alignment="CENTER_LEFT" styleClass="stat-card"
+                          GridPane.columnIndex="2" GridPane.rowIndex="0">
+                        <HBox alignment="CENTER_LEFT" spacing="8"
+                              style="-fx-padding: 0 0 12 0;">
+                            <Label text="📉" styleClass="stat-icon"/>
+                            <Label text="Expenses" styleClass="grid-title"/>
+                        </HBox>
+                        <Label fx:id="expenseLabel" styleClass="grid-stat grid-expense"/>
+                    </VBox>
+
+                    <!-- SAVINGS -->
+                    <VBox alignment="CENTER_LEFT" styleClass="stat-card"
+                          GridPane.columnIndex="3" GridPane.rowIndex="0">
+                        <HBox alignment="CENTER_LEFT" spacing="8"
+                              style="-fx-padding: 0 0 12 0;">
+                            <Label text="🏦" styleClass="stat-icon"/>
+                            <Label text="Savings" styleClass="grid-title"/>
+                        </HBox>
+                        <Label fx:id="savingsLabel" styleClass="grid-stat grid-savings"/>
+                    </VBox>
+
+                </GridPane>
+
+                <!-- CASH FLOW CHART -->
+                <VBox spacing="12" styleClass="dashboard-table-section">
+                    <Label text="Cash Flow Overview" styleClass="section-title"/>
+                    <LineChart fx:id="transactionChart"
+                               prefHeight="300"
+                               maxWidth="Infinity"
+                               VBox.vgrow="NEVER"
+                               styleClass="chart"
+                               animated="false">
+                        <xAxis>
+                            <NumberAxis label="Day"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Amount"/>
+                        </yAxis>
+                    </LineChart>
+                </VBox>
+
+                <!-- PIE CHART + LIST SIDE BY SIDE -->
+                <HBox spacing="16" VBox.vgrow="ALWAYS">
+
+                    <!-- SPENDING BY CATEGORY -->
+                    <VBox spacing="12"
+                          styleClass="dashboard-table-section"
+                          HBox.hgrow="ALWAYS">
+                        <Label text="Spending by Category"
+                               styleClass="section-title"/>
+                        <PieChart fx:id="categoryChart"
+                                  prefHeight="320"
+                                  maxWidth="Infinity"
+                                  styleClass="chart-pie"/>
+                    </VBox>
+
+                    <!-- BUDGET BREAKDOWN -->
+                    <VBox fx:id="budgetContainer"
+                          spacing="12"
+                          styleClass="dashboard-table-section"
+                          HBox.hgrow="ALWAYS">
+                        <Label text="Budget Breakdown"
+                               styleClass="section-title"/>
+                        <ListView fx:id="budgetListView"
+                                  prefHeight="320"
+                                  maxWidth="Infinity"
+                                  VBox.vgrow="ALWAYS"
+                                  styleClass="list-cell"/>
+                    </VBox>
+
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

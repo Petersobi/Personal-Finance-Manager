@@ -14,14 +14,16 @@ public class SQLiteUserDAO implements UserRepository {
     public void save(User user){
         String sql = """
                 INSERT INTO users(
-                username,password,created_at
-                ) VALUES (?,?,?)
+                username,password,created_at,first_name,last_name
+                ) VALUES (?,?,?,?,?)
                 """;
         try (Connection connection = DButil.getConnection();
              PreparedStatement prs = connection.prepareStatement(sql)){
             prs.setString(1, user.getUsername());
             prs.setString(2, user.getPassword());
             prs.setString(3,user.getCreatedAt().toString());
+            prs.setString(4, user.getFirstName());
+            prs.setString(5, user.getLastName());
 
             prs.executeUpdate();
 
@@ -48,7 +50,9 @@ public class SQLiteUserDAO implements UserRepository {
                         rs.getLong("id"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        LocalDate.parse(rs.getString("created_at"))
+                        LocalDate.parse(rs.getString("created_at")),
+                                rs.getString("first_name"),
+                                rs.getString("last_name")
                 );
             }
             return null;
@@ -70,7 +74,9 @@ public class SQLiteUserDAO implements UserRepository {
                         rs.getLong("id"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        LocalDate.parse(rs.getString("created_at"))
+                        LocalDate.parse(rs.getString("created_at")),
+                        rs.getString("first_name"),
+                        rs.getString("last_name")
                 );
             }
             return null;

@@ -17,7 +17,7 @@ public class SQLIteCategoryDAO implements CategoryRepository {
     public void save(Category category) {
         String sql = """
                 INSERT INTO categories(
-                user_id,name,type,is_delected)
+                user_id,name,type,is_deleted)
                 VALUES (?,?,?,0);
                 """;
         try(Connection connection = DButil.getConnection();
@@ -33,7 +33,7 @@ public class SQLIteCategoryDAO implements CategoryRepository {
                 category.setId(keys.getLong(1));
             }
         } catch (SQLException e) {
-            throw new DataAccessException("Error Saving Category",e);
+            throw new DataAccessException("Error Saving Category "+e.getMessage(),e);
         }
     }
 
@@ -96,6 +96,25 @@ public class SQLIteCategoryDAO implements CategoryRepository {
 
         } catch (SQLException e) {
             throw new DataAccessException("Error deleting Category",e);
+        }
+    }
+
+    @Override
+    public void update(Long categoryID,String categoryName,String categoryType) {
+        String sql = """
+                UPDATE categories
+                SET name =?, type =?
+                WHERE id =?
+                """;
+        try(Connection conn = DButil.getConnection();
+        PreparedStatement prs = conn.prepareStatement(sql)) {
+            prs.setString(1,categoryName);
+            prs.setString(2,categoryType);
+            prs.setLong(3,categoryID);
+
+            prs.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error updating category",e);
         }
     }
 

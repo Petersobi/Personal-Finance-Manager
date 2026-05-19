@@ -12,12 +12,13 @@ public class Transaction {
     private String description;
     private LocalDate transactionDate;
     private LocalDateTime createdAt;
+    private boolean deleted;
 
     public Transaction(Long userId, Long categoryId, BigDecimal amount, String description, LocalDate transactionDate, LocalDateTime createdAt){
-        this.userId = userId;this.categoryId = categoryId; this.amount = amount; this.description = description; this.transactionDate = transactionDate; this.createdAt = createdAt;
+        this.userId = userId;this.categoryId = categoryId; this.amount = amount; this.description = description; this.transactionDate = transactionDate; this.createdAt = createdAt; this.deleted = false;
     }
-    public Transaction(Long id,Long userId,Long categoryId,BigDecimal amount,String description,LocalDate transactionDate , LocalDateTime createdAt){
-        this.id = id; this.userId = userId;this.categoryId = categoryId; this.amount = amount; this.description = description; this.transactionDate = transactionDate;this.createdAt = createdAt;
+    public Transaction(Long id,Long userId,Long categoryId,BigDecimal amount,String description,LocalDate transactionDate , LocalDateTime createdAt,boolean deleted){
+        this.id = id; this.userId = userId;this.categoryId = categoryId; this.amount = amount; this.description = description; this.transactionDate = transactionDate;this.createdAt = createdAt; this.deleted = deleted;
     }
 
     public void setId(Long id) {
@@ -51,4 +52,9 @@ public class Transaction {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
 }

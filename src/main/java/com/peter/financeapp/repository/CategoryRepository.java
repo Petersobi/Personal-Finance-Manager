@@ -9,4 +9,5 @@ public interface CategoryRepository {
     List<Category> findByUserID(Long userId);
     Category findById(Long id);
     void softDelete(Long categoryID);
+    void update(Long categoryID,String categoryName,String categoryType);
 }
